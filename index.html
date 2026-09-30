@@ -215,7 +215,12 @@
             } catch (error) {
                 console.error('Error cargando la base de datos:', error);
                 const idiomaActual = document.getElementById('idioma').value;
-                document.getElementById('contenedor-piezas').innerHTML = `<p class="mensaje-vacio">${traducciones[idiomaActual].error}</p>`;
+                const contenedor = document.getElementById('contenedor-piezas');
+                contenedor.innerHTML = '';
+                const pError = document.createElement('p');
+                pError.className = 'mensaje-vacio';
+                pError.textContent = traducciones[idiomaActual].error;
+                contenedor.appendChild(pError);
             }
         }
 
@@ -256,7 +261,10 @@
             const idiomaActual = document.getElementById('idioma').value;
 
             if (piezas.length === 0) {
-                contenedor.innerHTML = `<p class="mensaje-vacio">${traducciones[idiomaActual].vacio}</p>`;
+                const pVacio = document.createElement('p');
+                pVacio.className = 'mensaje-vacio';
+                pVacio.textContent = traducciones[idiomaActual].vacio;
+                contenedor.appendChild(pVacio);
                 return;
             }
 
@@ -265,11 +273,27 @@
             piezas.forEach(pieza => {
                 const tarjeta = document.createElement('div');
                 tarjeta.className = 'pieza-card';
-                tarjeta.innerHTML = `
-                    <img src="\({pieza.imagen}" alt="\){pieza.nombre}" loading="lazy" width="150" height="150">
-                    <div class="id-pieza">${pieza.id}</div>
-                    <div class="nombre-pieza" title="\({pieza.nombre}">\){pieza.nombre}</div>
-                `;
+                
+                const imagenElemento = document.createElement('img');
+                imagenElemento.src = pieza.imagen;
+                imagenElemento.alt = pieza.nombre;
+                imagenElemento.setAttribute('loading', 'lazy');
+                imagenElemento.width = 150;
+                imagenElemento.height = 150;
+                
+                const idElemento = document.createElement('div');
+                idElemento.className = 'id-pieza';
+                idElemento.textContent = pieza.id;
+                
+                const nombreElemento = document.createElement('div');
+                nombreElemento.className = 'nombre-pieza';
+                nombreElemento.title = pieza.nombre;
+                nombreElemento.textContent = pieza.nombre;
+                
+                tarjeta.appendChild(imagenElemento);
+                tarjeta.appendChild(idElemento);
+                tarjeta.appendChild(nombreElemento);
+                
                 fragmento.appendChild(tarjeta);
             });
             
